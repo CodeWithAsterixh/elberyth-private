@@ -1,98 +1,7 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
 
-// 1. Category schema (for grouping products)
-export const categoryType = defineType({
-  name: 'category',
-  title: 'Category',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'name',
-      title: 'Name',
-      type: 'string',
-      validation: Rule => Rule.required().min(2).max(50)
-    }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'name', maxLength: 50 },
-      validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-      validation: Rule => Rule.max(200)
-    }),
-    defineField({
-      name: 'mainImage',
-      title: 'Main Image',
-      type: 'image',
-      options: { hotspot: true }
-    })
-  ],
-  preview: {
-    select: { title: 'name', media: 'mainImage' }
-  }
-})
 
-// 2. Collection schema (e.g. seasonal, editorial, curated groups)
-export const collectionType = defineType({
-  name: 'collection',
-  title: 'Collection',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: Rule => Rule.required().min(2).max(100)
-    }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: { source: 'title', maxLength: 100 },
-      validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text'
-    }),
-    defineField({
-      name: 'products',
-      title: 'Products',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'reference',
-          to: [{type: 'product'}]
-        })
-      ],
-      validation: Rule => Rule.required().min(1)
-    }),
-    defineField({
-      name: 'heroImage',
-      title: 'Hero Image',
-      type: 'image',
-      options: { hotspot: true }
-    }),
-    defineField({
-      name: 'priority',
-      title: 'Display Order',
-      type: 'number',
-      description: 'Lower numbers appear first',
-      validation: Rule => Rule.integer().min(0)
-    })
-  ],
-  preview: {
-    select: { title: 'title', media: 'heroImage' }
-  }
-})
 
-// 3. Enhanced Product schema
 export const productType = defineType({
   name: 'product',
   title: 'Product',
@@ -105,7 +14,7 @@ export const productType = defineType({
     defineField({ name: 'collections', title: 'Collections', type: 'array', of: [{ type: 'reference', to: { type: 'collection' } }] }),
     defineField({ name: 'images', title: 'Images', type: 'array', of: [defineArrayMember({ type: 'image', options: { hotspot: true } })], validation: Rule => Rule.required().min(1) }),
     defineField({ name: 'description', title: 'Short Description', type: 'text', validation: Rule => Rule.required().max(200) }),
-    defineField({ name: 'details', title: 'Details', type: 'blockContent' }),
+    defineField({ name: 'details', title: 'Details', type: 'text' }),
     defineField({ name: 'features', title: 'Key Features', type: 'array', of: [defineArrayMember({ type: 'string' })] }),
     defineField({ name: 'variants', title: 'Variants', type: 'array', of: [
       defineArrayMember({
