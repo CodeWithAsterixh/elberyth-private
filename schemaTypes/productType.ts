@@ -1,5 +1,4 @@
-import {defineField, defineType, defineArrayMember} from 'sanity'
-
+import { defineField, defineType, defineArrayMember } from 'sanity'
 
 export const productType = defineType({
   name: 'product',
@@ -71,6 +70,7 @@ export const productType = defineType({
       description: 'List of notable product features',
       of: [defineArrayMember({ type: 'string' })]
     }),
+    // Updated variants: reference to new 'size' and 'color' types
     defineField({
       name: 'variants',
       title: 'Variants',
@@ -80,11 +80,35 @@ export const productType = defineType({
         defineArrayMember({
           type: 'object',
           name: 'variant',
+          title: 'Variant',
           fields: [
-            defineField({ name: 'sku', title: 'SKU', type: 'string', description: 'Stock Keeping Unit identifier' }),
-            defineField({ name: 'size', title: 'Size', type: 'string', options: { list: ['XS','S','M','L','XL','XXL'] }, description: 'Available size option' }),
-            defineField({ name: 'color', title: 'Color', type: 'string', description: 'Color option for the variant' }),
-            defineField({ name: 'stock', title: 'Stock Level', type: 'number', description: 'Number of items available in stock', validation: Rule => Rule.min(0) })
+            defineField({
+              name: 'sku',
+              title: 'SKU',
+              type: 'string',
+              description: 'Stock Keeping Unit identifier'
+            }),
+            defineField({
+              name: 'size',
+              title: 'Size',
+              type: 'reference',
+              to: [{ type: 'size' }],
+              description: 'Reference to a predefined size'
+            }),
+            defineField({
+              name: 'color',
+              title: 'Color',
+              type: 'reference',
+              to: [{ type: 'color' }],
+              description: 'Reference to a predefined color'
+            }),
+            defineField({
+              name: 'stock',
+              title: 'Stock Level',
+              type: 'number',
+              description: 'Number of items available in stock',
+              validation: Rule => Rule.min(0)
+            })
           ]
         })
       ]
@@ -109,8 +133,20 @@ export const productType = defineType({
       type: 'object',
       description: 'Metadata for search engine optimization',
       fields: [
-        defineField({ name: 'metaTitle', title: 'Meta Title', type: 'string', description: 'Title for SEO (max 60 chars)', validation: Rule => Rule.max(60) }),
-        defineField({ name: 'metaDescription', title: 'Meta Description', type: 'text', description: 'Description for SEO (max 160 chars)', validation: Rule => Rule.max(160) })
+        defineField({
+          name: 'metaTitle',
+          title: 'Meta Title',
+          type: 'string',
+          description: 'Title for SEO (max 60 chars)',
+          validation: Rule => Rule.max(60)
+        }),
+        defineField({
+          name: 'metaDescription',
+          title: 'Meta Description',
+          type: 'text',
+          description: 'Description for SEO (max 160 chars)',
+          validation: Rule => Rule.max(160)
+        })
       ]
     })
   ],
