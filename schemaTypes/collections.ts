@@ -9,24 +9,28 @@ export const collections = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      description: 'The human-readable name of the collection',
       validation: Rule => Rule.required().min(2).max(100)
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      description: 'URL-friendly identifier generated from the title',
       options: { source: 'title', maxLength: 100 },
       validation: Rule => Rule.required()
     }),
     defineField({
       name: 'description',
       title: 'Description',
-      type: 'text'
+      type: 'text',
+      description: 'A brief overview of this collection'
     }),
     defineField({
       name: 'products',
       title: 'Products',
       type: 'array',
+      description: 'List of products included in this collection',
       of: [
         defineArrayMember({
           type: 'reference',
@@ -39,6 +43,7 @@ export const collections = defineType({
       name: 'heroImage',
       title: 'Hero Image',
       type: 'image',
+      description: 'Main banner image representing the collection',
       options: { hotspot: true }
     }),
     defineField({
@@ -52,4 +57,4 @@ export const collections = defineType({
   preview: {
     select: { title: 'title', media: 'heroImage' }
   }
-})
+});
