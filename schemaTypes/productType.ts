@@ -187,7 +187,7 @@ export const productType = defineType({
     prepare({title, imageUrl, price, variants}) {
       const variantsCount = variants?.length || 0
       return {
-        title: title || 'Untitled Product',
+        title: title,
         subtitle: `₦${price?.toLocaleString() || 0} • ${variantsCount} variant${variantsCount === 1 ? '' : 's'}`,
         media: imageUrl,
       }
