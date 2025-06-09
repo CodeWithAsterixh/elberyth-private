@@ -180,7 +180,7 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'name',
-      imageUrl: 'images[0]',
+      imageUrl: 'images[0]->asset->url',
       price: 'price',
       variants: 'variants',
     },
