@@ -10,33 +10,62 @@ export const deliveryZones = defineType({
       name: 'name',
       title: 'Zone name',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'rates',
       title: 'Zone rates',
       type: 'array',
+      validation: (Rule) => Rule.required(),
       of: [
         {
           type: 'object',
           fields: [
             defineField({
               name: 'amount',
-              title: 'Amount per single unit',
+              title: 'Rate Amount',
               type: 'number',
+              validation: (Rule) => Rule.required().min(0),
             }),
             defineField({
-              name: 'unit',
-              title: 'Rate unit',
+              name: 'unitType',
+              title: 'Unit Type',
               type: 'string',
-              description: 'Unit for current',
               options: {
-                list: units,
-                layout: 'radio',
+                list: units.map(unit => ({
+                  title: unit.title,
+                  value: unit.value
+                })),
+                layout: 'radio'
               },
-            }),
+              validation: (Rule) => Rule.required(),
+            })
           ],
-        },
-      ],
-    }),
+          preview: {
+            select: {
+              amount: 'amount',
+              unit: 'unitType'
+            },
+            prepare({amount, unit}) {
+              return {
+                title: `₦${amount?.toLocaleString() || 0} per ${unit?.toUpperCase() || ''}`
+              }
+            }
+          }
+        }
+      ]
+    })
   ],
+  preview: {
+    select: {
+      title: 'name',
+      rates: 'rates'
+    },
+    prepare({title, rates}) {
+      return {
+        title,
+        subtitle: `${rates?.length || 0} rate${rates?.length === 1 ? '' : 's'} configured`
+      }
+    }
+  }
 })
