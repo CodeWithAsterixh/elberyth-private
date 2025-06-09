@@ -22,13 +22,6 @@ export const productType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'price',
-      title: 'Price (in naira)',
-      type: 'number',
-      description: 'The retail price of the product in Nigerian Naira',
-      validation: (Rule) => Rule.required().min(0),
-    }),
-    defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
@@ -136,6 +129,14 @@ export const productType = defineType({
                 }),
               ],
             }),
+
+            defineField({
+              name: 'price',
+              title: 'Price (in naira)',
+              type: 'number',
+              description: 'The retail price of the product in Nigerian Naira',
+              validation: (Rule) => Rule.required().min(0),
+            }),
           ],
         }),
       ],
@@ -180,15 +181,13 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'name',
-      imageUrl: 'images[0]->asset->url',
-      price: 'price',
-      variants: 'variants',
+      imageUrl: 'images[0]',
+      sub:'slug.current',
     },
-    prepare({title, imageUrl, price, variants}) {
-      const variantsCount = variants?.length || 0
+    prepare({title, imageUrl,sub}) {
       return {
         title: title,
-        subtitle: `₦${price?.toLocaleString() || 0} • ${variantsCount} variant${variantsCount === 1 ? '' : 's'}`,
+        subtitle: sub ? `/${sub}` : 'No slug set',
         media: imageUrl,
       }
     },
