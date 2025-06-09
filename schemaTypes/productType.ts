@@ -180,15 +180,16 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'name',
-      media: 'images.0',
+      imageUrl: 'images[0]',
       price: 'price',
-      variantsCount: 'variants.length',
+      variants: 'variants',
     },
-    prepare({title, media, price, variantsCount = 0}) {
+    prepare({title, imageUrl, price, variants}) {
+      const variantsCount = variants?.length || 0
       return {
-        title: title,
-        subtitle: `₦${price?.toLocaleString()} • ${variantsCount} variant${variantsCount === 1 ? '' : 's'}`,
-        media: media,
+        title: title || 'Untitled Product',
+        subtitle: `₦${price?.toLocaleString() || 0} • ${variantsCount} variant${variantsCount === 1 ? '' : 's'}`,
+        media: imageUrl,
       }
     },
   },
