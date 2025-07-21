@@ -1,5 +1,6 @@
-import {defineField, defineType, defineArrayMember} from 'sanity'
-import units from './units'
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import imageUrlBuilder from '../lib/utils/imageUrlBuilder'
+import {variantType} from './productVariant'
 
 export const productType = defineType({
   name: 'product',
@@ -65,82 +66,7 @@ export const productType = defineType({
       of: [defineArrayMember({type: 'string'})],
     }),
     // Updated variants: reference to new 'size' and 'color' types
-    defineField({
-      name: 'variants',
-      title: 'Variants',
-      type: 'array',
-      description: 'Different versions or models of this product',
-      of: [
-        defineArrayMember({
-          type: 'object',
-          name: 'variant',
-          title: 'Variant',
-          fields: [
-            defineField({
-              name: 'sku',
-              title: 'SKU',
-              type: 'string',
-              description: 'Stock Keeping Unit identifier',
-            }),
-            defineField({
-              name: 'size',
-              title: 'Size',
-              type: 'reference',
-              to: [{type: 'size'}],
-              description: 'Reference to a predefined size',
-            }),
-            defineField({
-              name: 'color',
-              title: 'Color',
-              type: 'reference',
-              to: [{type: 'color'}],
-              description: 'Reference to a predefined color',
-            }),
-            defineField({
-              name: 'stock',
-              title: 'Stock Level',
-              type: 'number',
-              description: 'Number of items available in stock',
-              validation: (Rule) => Rule.min(0),
-            }),
-            defineField({
-              name: 'weight',
-              title: 'Product Weight',
-              type: 'object',
-              description: 'Weight of variant used to process shipping/delivery rate',
-              fields: [
-                defineField({
-                  name: 'value',
-                  title: 'Weight value',
-                  type: 'number',
-                  description: 'Value of weight in unit',
-                  validation: (Rule) => Rule.min(0),
-                }),
-
-                defineField({
-                  name: 'unit',
-                  title: 'Weight unit',
-                  type: 'string',
-                  description: 'Unit for item weight',
-                  options: {
-                    list: units,
-                    layout: 'radio',
-                  },
-                }),
-              ],
-            }),
-
-            defineField({
-              name: 'price',
-              title: 'Price (in naira)',
-              type: 'number',
-              description: 'The retail price of the product in Nigerian Naira',
-              validation: (Rule) => Rule.required().min(0),
-            }),
-          ],
-        }),
-      ],
-    }),
+    variantType,
     defineField({
       name: 'rating',
       title: 'Average Rating',
@@ -178,17 +104,42 @@ export const productType = defineType({
       ],
     }),
   ],
+  orderings: [
+    {
+      title: 'A - Z',
+      name: 'productNameAsc',
+      by: [
+        {
+          field: 'name',
+          direction: 'asc',
+        },
+      ],
+    },
+    {
+      title: 'Z - A',
+      name: 'productNameDsc',
+      by: [
+        {
+          field: 'name',
+          direction: 'desc',
+        },
+      ],
+    },
+  ],
   preview: {
     select: {
       title: 'name',
-      imageUrl: 'images[0]',
-      sub:'slug.current',
+      images: 'images',
+      sub: 'slug.current',
     },
-    prepare({title, imageUrl,sub}) {
+    prepare({title, images, sub}) {
+      const url = imageUrlBuilder(images, {
+        quality: 10,
+      })[0]
       return {
         title: title,
         subtitle: sub ? `/${sub}` : 'No slug set',
-        media: imageUrl,
+        imageUrl: url,
       }
     },
   },

@@ -55,6 +55,13 @@ export const collections = defineType({
     })
   ],
   preview: {
-    select: { title: 'title', media: 'heroImage' }
+    select: { title: 'title', media: 'heroImage', subtitle:"slug.current" },
+    prepare({title,media,subtitle}) {
+        return{
+          title,
+          media,
+          subtitle
+        }
+    },
   }
 });

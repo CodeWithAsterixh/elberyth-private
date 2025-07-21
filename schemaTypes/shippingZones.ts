@@ -1,5 +1,7 @@
 import {defineField, defineType} from 'sanity'
 import units from './units'
+import { generateAccessibleColorPair } from '../lib/helpers/color_generator'
+import { createColorSwatchDataUrl } from '../lib/helpers/color_swatch'
 
 export const deliveryZones = defineType({
   name: 'shipping_zone',
@@ -62,9 +64,12 @@ export const deliveryZones = defineType({
       rates: 'rates'
     },
     prepare({title, rates}) {
+      const {primary,text} = generateAccessibleColorPair()
+                  const previewImg = createColorSwatchDataUrl(primary,32,0,`${title.at(0)}${title.at((title.length/2)-1)}`.toUpperCase(),text)
       return {
         title,
-        subtitle: `${rates?.length || 0} rate${rates?.length === 1 ? '' : 's'} configured`
+        subtitle: `${rates?.length || 0} rate${rates?.length === 1 ? '' : 's'} configured`,
+        imageUrl:previewImg
       }
     }
   }

@@ -1,5 +1,7 @@
 // schemas/color.ts
-import { defineField, defineType } from 'sanity';
+import { defineField, defineType } from 'sanity'
+import { createColorSwatchDataUrl } from '../lib/helpers/color_swatch'
+import { generateAccessibleColorPair } from '../lib/helpers/color_generator'
 export const colorType = defineType({
   name: 'color',
   title: 'Color',
@@ -10,14 +12,14 @@ export const colorType = defineType({
       title: 'Name',
       type: 'string',
       description: 'Human-readable color name',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'hex',
       title: 'Hex Code',
       type: 'string',
       description: 'Hexadecimal color code (e.g. #FF5733)',
-      validation: Rule => Rule.required().regex(/^#([0-9A-F]{3}){1,2}$/i)
+      validation: (Rule) => Rule.required().regex(/^#([0-9A-F]{3}){1,2}$/i),
     }),
     defineField({
       name: 'rgba',
@@ -25,8 +27,27 @@ export const colorType = defineType({
       type: 'string',
       description: 'RGBA color value (e.g. rgba(255,87,51,0.5))',
       // No validation needed; field is optional by default
-    })
-  ]
-});
+    }),
+  ],
+  preview: {
+    select: {
+      hex: 'hex',
+      rgba: 'rgba',
+      label: 'name',
+    },
+    prepare(selectProps) {
+      const {hex, label, rgba} = selectProps
+            const {primary,text} = generateAccessibleColorPair({
+              primary:hex||rgba
+            })
+      const sub = hex && rgba ? `${hex} (${rgba})` : hex ? hex : rgba ? rgba : ''
 
-
+      let url = createColorSwatchDataUrl(primary || '#fff', 32,0,label.at(0).toUpperCase(),text)
+      return {
+        title: label,
+        subtitle: sub,
+        imageUrl: url,
+      }
+    },
+  },
+})

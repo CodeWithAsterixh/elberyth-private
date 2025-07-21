@@ -15,10 +15,11 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^3.91.0",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.99.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sanity": "^3.91.0",
+    "sanity": "^3.99.0",
     "styled-components": "^6.1.17"
   },
   "devDependencies": {
@@ -33,5 +34,6 @@
     "printWidth": 100,
     "bracketSpacing": false,
     "singleQuote": true
-  }
+  },
+  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
 }

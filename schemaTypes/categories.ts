@@ -36,6 +36,13 @@ export const categories = defineType({
     })
   ],
   preview: {
-    select: { title: 'name', media: 'mainImage' }
+    select: { title: 'name', media: 'mainImage', subtitle:"slug.current" },
+    prepare({title,media,subtitle}) {
+        return{
+          title,
+          media,
+          subtitle
+        }
+    },
   }
 });
