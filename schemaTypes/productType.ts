@@ -18,13 +18,13 @@ export const productType = defineType({
     select: {
       title: 'name',
       images: 'images',
-      sub: 'slug.current',
+      sub: 'productType',
     },
     prepare({title, images, sub}) {
       const url = imageUrlBuilder(images, {quality: 10})[0]
       return {
         title,
-        subtitle: sub ? `/${sub}` : 'No slug set',
+        subtitle: sub || 'No type specified',
         imageUrl: url,
       }
     },
