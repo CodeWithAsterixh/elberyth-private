@@ -24,7 +24,7 @@ export const deliveryStates = defineType({
       title: 'name',
     },
     prepare({title}) {
-      const {primary, text} = generateAccessibleColorPair()
+      const {primary, text} = generateAccessibleColorPair({text: '#fff'})
       const previewImg = createColorSwatchDataUrl(
         primary,
         32,

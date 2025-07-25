@@ -2,6 +2,7 @@ import { categories } from "./categories";
 import { collections } from "./collections";
 import { colorType } from "./colors";
 import { HomeUpdate } from "./homeUpdate";
+import { materialType } from "./materialType";
 import { productType } from "./productType";
 import { deliveryStates } from "./ShippingStates";
 import { deliveryZones } from "./shippingZones";
@@ -17,7 +18,7 @@ export const schemaTypes = [
     SpecialOffers,
     deliveryZones,
     deliveryStates,
-
+    materialType,
     HomeUpdate,
     
    
