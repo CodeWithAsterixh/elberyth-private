@@ -13,6 +13,7 @@ export const productType = defineType({
     {name: 'skincareFields', title: 'Skincare Product Attributes', options: {collapsible: true}},
   ],
 
+  
   // Root preview shows product name and slug
   preview: {
     select: {

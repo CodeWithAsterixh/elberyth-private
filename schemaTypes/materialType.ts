@@ -18,7 +18,7 @@ export const materialType = defineType({
   ],
   preview: {
     select: {name: 'name', description: 'description'},
-    prepare({name, description}: {name: string; description: string}) {
+    prepare({name, description}) {
       const {primary, text} = generateAccessibleColorPair({text: '#fff'})
       return {
         title: name,

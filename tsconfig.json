@@ -7,11 +7,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "Preserve",
+    "resolveJsonModule": true, 
     "moduleDetection": "force",
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.tsk"],
   "exclude": ["node_modules"]
 }
