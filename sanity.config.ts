@@ -29,7 +29,14 @@ export default defineConfig({
               filterId: 'skincare',
               schemaType: 'product',
             }),
+            deskItemBuilder(S, {
+              docTitle: 'All Products',
+              filterField: 'productType',
+              filterId: '',
+              schemaType: 'product',
+            }),
           ],
+          skipUsedSchemas: false,  
         },
         {
           title: 'Delivery information',

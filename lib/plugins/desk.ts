@@ -23,7 +23,9 @@ export const deskItemBuilder = (
         S.documentList()
 
           .title(docTitle)
-          .filter(`_type == "${schemaType}" && ${filterField} == "${filterId}"`),
+          .filter(
+            `_type == "${schemaType}"${filterId.trim() !== '' ? `&& ${filterField} == "${filterId}"` : ''}`,
+          ),
       ),
     usedSchema: schemaType,
   }
@@ -32,6 +34,7 @@ export type GroupDefinition = {
   title: string
   schemaTypes: string[]
   builders: (S: StructureBuilder) => {builder: ListItemBuilder; usedSchema: string}[]
+  skipUsedSchemas?: boolean
 }
 
 export const deskStructure = (groups: GroupDefinition[]) => (S: StructureBuilder) => {
@@ -42,7 +45,7 @@ export const deskStructure = (groups: GroupDefinition[]) => (S: StructureBuilder
     .title('Content')
     .items([
       // Grouped lists
-      ...groups.map(({title, builders, schemaTypes}) => {
+      ...groups.map(({title, builders, schemaTypes, skipUsedSchemas}) => {
         const buildersList = builders(S)
           .map((bd) => {
             const hasSchema = schemaTypes.includes(bd.usedSchema)
@@ -51,9 +54,11 @@ export const deskStructure = (groups: GroupDefinition[]) => (S: StructureBuilder
             return bd
           })
           .filter((bs) => bs !== undefined)
-        const unBuiltTypes = schemaTypes.filter(
-          (st) => !buildersList.find((b) => b.usedSchema !== st),
-        )
+        const usedSchemas = new Set(buildersList.map((b) => b.usedSchema))
+        const unusedTypes = skipUsedSchemas
+          ? schemaTypes
+          : schemaTypes.filter((st) => !usedSchemas.has(st))
+
         return S.listItem()
           .title(title)
           .child(
@@ -62,7 +67,7 @@ export const deskStructure = (groups: GroupDefinition[]) => (S: StructureBuilder
               .items([
                 ...buildersList.map((b) => b.builder),
                 ...S.documentTypeListItems().filter((item) =>
-                  unBuiltTypes.includes(item.getId() || ''),
+                  unusedTypes.includes(item.getId() || ''),
                 ),
               ]),
           )
